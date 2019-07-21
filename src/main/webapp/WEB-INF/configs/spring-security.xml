@@ -10,7 +10,7 @@
 
         <!-- https://www.baeldung.com/spring-security-granted-authority-vs-role -->
         <intercept-url pattern="/home" access="isAuthenticated()" requires-channel="any"/>
-        <intercept-url pattern="/login*" access="isAnonymous()" requires-channel="any"/>
+        <intercept-url pattern="/login*" access="permitAll()" requires-channel="any"/>
         <!--<intercept-url pattern="/admin*" access="hasAuthority('admin')" requires-channel="any"/>-->
         <intercept-url pattern="/admin*" access="hasRole('ROLE_ADMIN')" requires-channel="any"/>
 

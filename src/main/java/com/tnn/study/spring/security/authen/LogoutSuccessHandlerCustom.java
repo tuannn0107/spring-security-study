@@ -16,6 +16,7 @@ public class LogoutSuccessHandlerCustom implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         logger.info("Start handle logout success!");
+        response.sendRedirect("loginAdmin");
         // Todo
     }
 }
