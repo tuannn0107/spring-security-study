@@ -58,9 +58,13 @@ public class ApplicationUserRepositoryImpl implements ApplicationUserRepository 
 
         ApplicationUser applicationUser = null;
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority("admin"));
+
+        /** Role authorities should be prefixed with ROLE */
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        res.add(new ApplicationUser("admin", "admin", true, true, true, true,grantedAuthorities));
 
         for (long i = 0; i < 10; i++) {
+            grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
             applicationUser = new ApplicationUser("username" + i, "password" + 1, true, true, true, true,grantedAuthorities);
             res.add(applicationUser);
         }

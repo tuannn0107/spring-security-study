@@ -6,17 +6,21 @@
                 http://www.springframework.org/schema/security
                 http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <http use-expressions="true">
+    <http use-expressions="true" auto-config="false">
+
+        <!-- https://www.baeldung.com/spring-security-granted-authority-vs-role -->
+        <intercept-url pattern="/home" access="isAuthenticated()" requires-channel="any"/>
         <intercept-url pattern="/login*" access="isAnonymous()" requires-channel="any"/>
-        <intercept-url pattern="/admin**" access="hasRole('ROLE_ADMIN')" requires-channel="any"/>
+        <!--<intercept-url pattern="/admin*" access="hasAuthority('admin')" requires-channel="any"/>-->
+        <intercept-url pattern="/admin*" access="hasRole('ROLE_ADMIN')" requires-channel="any"/>
 
         <form-login
-                login-processing-url="/loginProcess"
+                login-page='/loginAdmin'
+                login-processing-url="/loginAdminProcess"
                 username-parameter="username"
                 password-parameter="password"
-                default-target-url="/home"
                 always-use-default-target="true"
-                login-page='/login'
+                default-target-url="/home"
                 authentication-failure-url="/login?error=true"
                 authentication-success-handler-ref="authenticationSuccessHandler"
                 authentication-failure-handler-ref="authenticationFailureHandler"
@@ -24,15 +28,11 @@
 
         <logout
                 logout-url="/logout"
-                logout-success-url="/login"
                 invalidate-session="true"
                 success-handler-ref="logoutSuccessHandler"
                 delete-cookies="JSESSIONID"
         />
-
-        <!-- Do note, <csrf disabled="true" /> element tells the Spring Security Filter to intercept the /logout link as a HTTP GET request. -->
         <csrf disabled="true" />
-        <!--<cors ref="corsFilter" />-->
     </http>
 
     <authentication-manager>

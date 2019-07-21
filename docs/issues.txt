@@ -1,0 +1,6 @@
+1. Config log
+
+2. Role did not work
+  - Role authorities should be prefixed with ROLE
+
+3. Login with google, facebook

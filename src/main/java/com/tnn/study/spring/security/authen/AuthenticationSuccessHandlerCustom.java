@@ -16,6 +16,8 @@ public class AuthenticationSuccessHandlerCustom implements AuthenticationSuccess
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         logger.info("Start handle authentication success!");
+        response.sendRedirect("adminHome");
+        /*response.sendRedirect("/home");*/
         // Todo
     }
 }

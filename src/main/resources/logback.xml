@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <contextName>spring-security-study</contextName>
     <timestamp key="byDay" datePattern="yyyyMMdd"/>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <Pattern>.%d [%thread] %-5level %logger{36} - %msg %n
-            </Pattern>
+            <Pattern>.%d [%thread] %-5level %logger{36} - %msg %n</Pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
         </filter>
     </appender>
-    <appender name="LOG_SBS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/spring-security-study/spring-security-study-server.log </file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>logs/spring-security-study/spring-security-study-server_%d{yyyyMMdd}.%i.log</fileNamePattern>
@@ -24,11 +25,11 @@
     </appender>
 
     <logger name="org.springframework" level="INFO" >
-        <appender-ref ref="LOG_SBS" />
+        <appender-ref ref="FILE" />
     </logger>
 
     <logger name="com.tnn.study.spring.security" level="INFO" >
-        <appender-ref ref="LOG_SBS" />
+        <appender-ref ref="FILE" />
     </logger>
 
     <root>

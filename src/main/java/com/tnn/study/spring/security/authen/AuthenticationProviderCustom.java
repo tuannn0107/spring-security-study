@@ -9,30 +9,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.nio.file.attribute.UserPrincipalNotFoundException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AuthenticationProviderCustom implements AuthenticationProvider {
     private static Logger logger = LoggerFactory.getLogger(AuthenticationProviderCustom.class);
 
-    /*@Autowired
+    @Autowired
     private ApplicationAuthenticationService applicationAuthenticationService;
 
     @Autowired
-    private ApplicationUserService applicationUserService;*/
+    private ApplicationUserService applicationUserService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         logger.info("Start authenticate!");
         ApplicationUser applicationUser = obtainApplicationUser(authentication);
-        return new AuthenticationCustom(applicationUser.getUsername(),
-                applicationUser.getPassword(),
-                applicationUser.getAuthorities(),
-                true,
-                "User " + applicationUser.getUsername());
-        /*if (applicationUser == null) {
+        if (applicationUser == null) {
             throw new BadCredentialsException("Could not obtain ApplicationUser");
         }
 
@@ -42,7 +42,7 @@ public class AuthenticationProviderCustom implements AuthenticationProvider {
             {
                 applicationUser = applicationUserService.readApplicationUser(applicationUser.getUsername());
                 return new AuthenticationCustom(applicationUser.getUsername(),
-                        applicationUser.getPassword(),
+                        null,
                         applicationUser.getAuthorities(),
                         true,
                         "User " + applicationUser.getUsername());
@@ -50,7 +50,7 @@ public class AuthenticationProviderCustom implements AuthenticationProvider {
         } catch (UserPrincipalNotFoundException e) {
             throw new BadCredentialsException(e.getMessage());
         }
-        throw new AuthenticationCredentialsNotFoundException("Authentication failed!");*/
+        throw new AuthenticationCredentialsNotFoundException("Authentication failed!");
     }
 
 
@@ -61,12 +61,14 @@ public class AuthenticationProviderCustom implements AuthenticationProvider {
      * @return
      */
     private ApplicationUser obtainApplicationUser(Authentication authentication) {
-        return new ApplicationUser(authentication.getPrincipal().toString(), authentication.getCredentials().toString(), null);
+        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority("user"));
+        return new ApplicationUser(authentication.getPrincipal().toString(), authentication.getCredentials().toString(), grantedAuthorities);
     }
 
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return false;
+        return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
     }
 }
